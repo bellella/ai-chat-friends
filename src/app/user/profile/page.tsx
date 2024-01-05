@@ -1,103 +1,89 @@
 'use client'
-import { SearchIcon } from '@/icons'
-import { Link, Image, Text, Box, Card, CardBody, Heading, Stack, Grid, Input, InputGroup, InputLeftElement, HStack, Button, FormLabel, useRadioGroup, useRadio, useToast } from '@chakra-ui/react'
 
 export default function Page() {
-  const toast = useToast()
   return (
-    <Stack p={3} w="100%" maxW="1000px" alignItems="center">
-      <Heading>Profile</Heading>
-      <Stack maxW="500px" w="100%">
-        <FormItem name="Name" />
-        <GenderItem />
-        <Date />
-      </Stack>
-      <Button mt={10} onClick={() => {
-        // Create an example promise that resolves in 5s
-        const examplePromise = new Promise((resolve, reject) => {
-          setTimeout(() => resolve(200), 5000)
-        })
-
-        // Will display the loading toast until the promise is either resolved
-        // or rejected.
-        toast.promise(examplePromise, {
-          success: { title: 'Promise resolved', description: 'Looks great' },
-          error: { title: 'Promise rejected', description: 'Something wrong' },
-          loading: { title: 'Promise pending', description: 'Please wait' },
-        })
-      }}>Update</Button>
-    </Stack>
-
+    <form className="max-w-lg mx-auto">
+      <div className="space-y-12">
+        <div className="border-b border-gray-900/10 pb-12">
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
+          <div className="mt-10">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-900">
+                Name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  autoComplete="given-name"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                About
+              </label>
+              <div className="mt-2">
+                <textarea
+                  id="about"
+                  name="about"
+                  rows={3}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  defaultValue={''}
+                />
+              </div>
+              <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+            </div>
+            <div>
+              <label htmlFor="
+  "></label>
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-900">
+                  Gender
+                </label>
+                <div className="flex gap-5">
+                  <div className="flex items-center gap-x-3">
+                    <input
+                      id="push-everything"
+                      name="push-notifications"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    />
+                    <label htmlFor="push-everything" className="block text-sm font-medium leading-6 text-gray-900">
+                      Female
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-x-3">
+                    <input
+                      id="push-email"
+                      name="push-notifications"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    />
+                    <label htmlFor="push-email" className="block text-sm font-medium leading-6 text-gray-900">
+                      Male
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-x-3">
+                    <input
+                      id="push-nothing"
+                      name="push-notifications"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    />
+                    <label htmlFor="push-nothing" className="block text-sm font-medium leading-6 text-gray-900">
+                      Other
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   )
 }
 
-const FormItem = ({ name }) => (
-  <Stack>
-    <FormLabel>{name}</FormLabel>
-    <Input
-      placeholder={name}
-      size='sm'
-    /></Stack>)
-
-const Date = () => (
-  <Stack><FormLabel>Birthday</FormLabel><Input
-    placeholder="Select Date and Time"
-    size="md"
-    type="datetime-local"
-  /></Stack>
-)
-
-const GenderItem = () => {
-  const options2 = ['Female', 'Male', 'Others']
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'framework',
-    defaultValue: 'react',
-    onChange: console.log,
-  })
-
-  return (<Stack>
-    <FormLabel>Gender</FormLabel>
-    <HStack>
-      {options2.map((value, i) => {
-        const radio = getRadioProps({ value })
-        return (
-          <RadioCard key={value + i} {...radio}>
-            {value}
-          </RadioCard>
-        )
-      })}
-    </HStack>
-  </Stack>);
-}
-
-function RadioCard(props) {
-  const { getInputProps, getRadioProps } = useRadio(props)
-
-  const input = getInputProps()
-  const checkbox = getRadioProps()
-
-  return (
-    <Box as='label'>
-      <input {...input} />
-      <Box
-        {...checkbox}
-        cursor='pointer'
-        borderWidth='1px'
-        borderRadius='md'
-        boxShadow='md'
-        _checked={{
-          bg: 'teal.600',
-          color: 'white',
-          borderColor: 'teal.600',
-        }}
-        _focus={{
-          boxShadow: 'outline',
-        }}
-        px={5}
-        py={3}
-      >
-        {props.children}
-      </Box>
-    </Box>
-  )
-}

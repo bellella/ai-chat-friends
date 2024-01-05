@@ -1,6 +1,3 @@
-import { Link } from '@chakra-ui/next-js'
-import { Text, Avatar, Box, Button, Heading, Input, VStack, HStack, Stack } from '@chakra-ui/react'
-
 const messages = [
   {
     sender: 'user',
@@ -33,34 +30,23 @@ const image = 'https://i.namu.wiki/i/bGfaCwl_uA56kIIGrjOXGB9ReqjrTvhEU5a7Eh5Otjn
 export default function Page() {
 
   return (
-    <Box w="full" px={3} maxW="1000px">
-      <Heading>Chat</Heading>
-      <HStack width="full" justifyContent="center">
-      <Box p={4} borderWidth="1px" borderRadius="md" width="500px" height="70vh">
-        <VStack w="100%" h="100%" spacing={4}>
-          <VStack
-          w="100%"
-            gap={3} flex="1" overflowY="auto">
-            {messages.map((message, index) => (
-              <HStack
-                key={index}
-                alignSelf={message.sender === 'user' ? 'flex-end' : 'flex-start'}
-              >
-                {message.sender === 'friend' && <Avatar name='Kola Tioluwani' src={image}/>}
-                <Box p={2}
-                  borderRadius="md"
-                  bg={message.sender === 'user' ? 'blue.100' : 'gray.100'}>
-                  <Text maxW="30vh">{message.text}</Text>
-                </Box>
-              </HStack>
-            ))}
-          </VStack>
-          <Input
-            placeholder="Message Friend..."
-          />
-        </VStack>
-      </Box>
-      </HStack>
-    </Box>
+    <div className="max-w-[1000px] mx-auto mt-10">
+      <div className="mx-auto max-w-md">
+        <div className="border border-gray-100 rounded-lg p-8">
+          <div className="flex flex-col gap-5">
+            {messages.map((message, index) => (<div className={`flex gap-5 ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+              {message.sender === 'friend' && <img
+                src="https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=1024x1024&w=is&k=20&c=iGtRKCTRSvPVl3eOIpzzse5SvQFfImkV0TZuFh-74ps="
+                className="rounded rounded-full overflow-hidden w-8 h-8" />}
+              <div className="bg-gray-100 rounded rounded-e-xl rounded-es-xl p-2">{message.sender}</div>
+            </div>))}
+          </div>
+          <div className="mt-5 relative">
+            <input type="text" className="w-full border border-gray rounded-lg p-3" placeholder="Message Friend..." />
+            <button className="absolute end-2.5 bottom-2.5 p-1 rounded-md flex item-center bg-purple-500 text-white font-medium px-5">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

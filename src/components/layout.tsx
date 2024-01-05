@@ -1,81 +1,120 @@
 'use client'
-import { BellIcon } from '@/icons';
-import { Box, Heading, Text, Link as ChakraLink, VStack, 
-    HStack, Flex, Link, Drawer, DrawerBody, DrawerContent, 
-    DrawerHeader, DrawerOverlay, IconButton, useDisclosure, Stack } from '@chakra-ui/react';
+import { Dialog } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/16/solid';
 import NextLink from 'next/link';
+import React from 'react';
 
 export default function GlobalLayout({ children }) {
-    const drawer = useDisclosure();
     return (
-        <Box>
-            <Draw drawer={drawer} />
-            <Header drawer={drawer}/>
-            <VStack spacing={4}>
+        <div className="bg-white">
+            <Header></Header>
+            <div className="relative min-h-svh px-6 pt-14 lg:px-8">
                 {children}
-            </VStack>
-            <Box mt={8}>
-                <Footer />
-            </Box>
-        </Box>
+            </div>
+            <Footer></Footer>
+        </div>
     );
-
 }
 
-const Draw = ({ drawer }) => {
-    const { isOpen, onOpen, onClose } = drawer;
-    return (<Drawer onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-            <DrawerHeader borderBottomWidth='1px'>Basic Drawer</DrawerHeader>
-            <DrawerBody>
-                <Stack mt={3} gap={6}>
-                <DrawerMenuItem name="my page"/>
-                <DrawerMenuItem name="payment"/>
-                <DrawerMenuItem name="about service"/>
-                <DrawerMenuItem name="sign out"/>
-                </Stack>
-            </DrawerBody>
-        </DrawerContent>
-    </Drawer>)
-}
+const navigation = [
+    { name: 'friends', href: '/friends' },
+    { name: 'Chat', href: '/chat' },
+    { name: 'sign up', href: '/sign/form' },
+    { name: 'User', href: '/user/profile' },
+    { name: 'Sign in', href: '/sign/sns' },
+]
 
-const DrawerMenuItem = ({name}) => (
-<Link as={NextLink} href="/sign/form" color="gray.600" fontWeight={600}>{name}</Link>
-)
+const Header = () => {
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
 
-const Header = ({ drawer }) => {
-    const { isOpen, onOpen, onClose } = drawer;
-    return (
-        <Flex justify="space-between" align="center" p={3} mb={8}>
-            <Heading>
-                <Link as={NextLink} href="/#">AiChatFriends👩‍🦰</Link>
-            </Heading>
-            <HStack spacing={4}>
-                <Link href='/friends'>
-                    Friends
-                </Link>
-                <Link href='/chat'>
-                    chat
-                </Link>
-                <Box>
-                    <IconButton
-                        onClick={onOpen}
-                        colorScheme='teal'
-                        aria-label='Call Segun'
-                        size='lg'
-                        icon={<BellIcon />}
+    return (<header className="absolute inset-x-0 top-0 z-50">
+        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+            <div className="flex lg:flex-1">
+                <a href="#" className="-m-1.5 p-1.5">
+                    <span className="sr-only">Your Company</span>
+                    <img
+                        className="h-8 w-auto"
+                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                        alt=""
                     />
-                </Box>
-                {/* Add more links as needed */}
-            </HStack>
-        </Flex >)
+                </a>
+            </div>
+            <div className="flex lg:hidden">
+                <button
+                    type="button"
+                    className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                    onClick={() => setMobileMenuOpen(true)}
+                >
+                    <span className="sr-only">Open main menu</span>
+                    <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                </button>
+            </div>
+            <div className="hidden lg:flex lg:gap-x-12">
+                {navigation.map((item) => (
+                    <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+                        {item.name}
+                    </a>
+                ))}
+            </div>
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    Log in <span aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
+        </nav>
+        <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+            <div className="fixed inset-0 z-50" />
+            <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+                <div className="flex items-center justify-between">
+                    <a href="#" className="-m-1.5 p-1.5">
+                        <span className="sr-only">Your Company</span>
+                        <img
+                            className="h-8 w-auto"
+                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                            alt=""
+                        />
+                    </a>
+                    <button
+                        type="button"
+                        className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                </div>
+                <div className="mt-6 flow-root">
+                    <div className="-my-6 divide-y divide-gray-500/10">
+                        <div className="space-y-2 py-6">
+                            {navigation.map((item) => (
+                                <NextLink
+                                    key={item.name}
+                                    href={item.href}
+                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                >
+                                    {item.name}
+                                </NextLink>
+                            ))}
+                        </div>
+                        <div className="py-6">
+                            <a
+                                href="#"
+                                className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                            >
+                                Log in
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </Dialog.Panel>
+        </Dialog>
+    </header>)
 }
 
 const Footer = () => {
     return (
-        <Flex p={4} bg="gray.200" alignItems="center" justifyContent="center" minHeight={200}>
-            <Text>&copy; 2024 푸터입니다.</Text>
-        </Flex>
+        <div className="py-10 text-center bg-black">
+            <p className="text-white">푸터입니다</p>
+        </div>
     );
 };

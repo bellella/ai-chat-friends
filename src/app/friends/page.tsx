@@ -1,8 +1,7 @@
 'use client'
-import { SearchIcon } from '@/icons'
-import { Link, Image, Text, Box, Card, CardBody, Heading, Stack, Grid, Input, InputGroup, InputLeftElement, Button, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Modal, useDisclosure, forwardRef, FormLabel, HStack, Progress } from '@chakra-ui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { Fragment } from 'react'
 
 const characters = [
   {
@@ -28,104 +27,111 @@ const characters = [
 ]
 
 export default function Page() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [character, setCharacter] = React.useState();
-
+  const modal = React.useState(false) //modal
   const click = (character) => {
     setCharacter(character);
-    onOpen();
+    const [, set] = modal;
+    set(true);
   }
 
   return (
-    <Box p={3} maxW="1000px">
-      <Box>
-        <FriendModal onClose={onClose} isOpen={isOpen} character={character} />
-        <Heading mb={5}>Friends</Heading>
-        <InputGroup>
-          <InputLeftElement pointerEvents='none'>
-            <SearchIcon color='gray.300' />
-          </InputLeftElement>
-          <Input type='tel' placeholder="Search friends to talk with!" paddingStart={10} />
-        </InputGroup>
-        <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']} gap={4} mt={5}>
-          {characters.map((c, i) => (
-            <FriendCard key={i} onClick={() => click(c)}  {...c} />
-          ))}
-        </Grid>
-      </Box>
-    </Box>
-
+    <div className="p-3 max-w-[1000px] mx-auto">
+      <FriendModal modal={modal} character={character} />
+      <h1 className="mb-5 text-3xl font-bold">Friends</h1>
+      <form>
+        <label for="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div className="relative">
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+          </div>
+          <input type="search" id="search" className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search" required />
+          <button type="submit" className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+        </div>
+      </form>
+      <div className="mt-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg-grid-cols-4 gap-5">
+        {characters.map((c, i) => (
+          <FriendCard key={i} onClick={() => click(c)}  {...c} />
+        ))}
+      </div>
+    </div>
   )
 }
 
-const FriendCard = forwardRef(({ name, image, description, onClick }, ref) => (<Box color='blue.400' _hover={{ color: 'blue.500' }}>
-  <Card maxW='sm' _hover={{ border: '1px solid', borderColor: 'blue.500' }} onClick={onClick}>
-    <CardBody p={3}>
-      <Image
+const FriendCard = React.forwardRef(({ name, image, description, onClick }, ref) => (
+  <div ref={ref} onClick={onClick}>
+    <div className="aspect-square overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+      <img
         src={image}
-        width={200}
-        height={200}
-        objectFit="contain"
-        alt='Green double couch with wooden legs'
-        borderRadius='lg'
+        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
       />
+    </div>
+    <p className="font-bold text-xl mt-3">{name}</p>
+    <p className="text-small mt-1">{description}</p>
+  </div>
+))
 
-      <Stack mt='3' spacing='3'>
-        <Heading size='md'>{name}</Heading>
-        <Text>
-          {description}
-        </Text>
-      </Stack>
-    </CardBody>
+const FriendModal = ({ modal, character }) => {
+  const [open, setOpen] = modal;
 
-  </Card></Box>))
+  const cancelButtonRef = React.useRef(null);
 
-const FriendModal = ({ isOpen, onClose, character }) => {
-  const router = useRouter()
+  return (
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </Transition.Child>
 
-  const onClick = () => {
-    router.push('/chat', { scroll: false })
-    //onClose();
-  }
-
-  return (<Modal isOpen={isOpen} onClose={onClose}>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>Friend Info</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        <HStack>
-          <Image
-            src={character?.image}
-            width={200}
-            height={200}
-            objectFit="contain"
-            alt='Green double couch with wooden legs'
-            borderRadius='lg'
-          />
-          <Stack flex={1}>
-            <Text fontWeight={600} fontSize="lg">{character?.name}</Text>
-            <Stack>
-              <FormLabel>Type</FormLabel>
-              <Text>Friendly</Text>
-            </Stack>
-            <Stack>
-              <FormLabel>Count</FormLabel>
-              <Text>3</Text>
-            </Stack>
-            <Stack>
-              <FormLabel>Closity</FormLabel>
-              <Progress hasStripe value={64} />
-            </Stack>
-          </Stack>
-        </HStack>
-      </ModalBody>
-
-      <ModalFooter justifyContent="center">
-        <Button colorScheme='blue' mr={3} onClick={onClick}>
-          Chat Now!
-        </Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>)
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-full max-w-lg">
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="mt-3 text-center sm:mt-0 sm:text-left">
+                    <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                    </Dialog.Title>
+                    <div className="mt-2 sm:flex gap-7">
+                      <div className="flex-1 overflow-hidden rounded-lg">
+                        <img className="w-full" src={character?.image} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="mt-2.5 font-bold text-lg">
+                          {character?.name}
+                        </h3>
+                        <p className="mt-2.5 text-gray-700 text-sm">
+                          {character?.description}
+                        </p>
+                      </div>
+                    </div>
+                    <button className="w-full mt-5 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Start a Chat</button>
+                    <div>
+                    </div>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition.Root>
+  )
 }

@@ -1,14 +1,11 @@
-import { Link, Image, Text, Box, Card, CardBody, Heading, Stack, Grid, Input, InputGroup, InputLeftElement, HStack, Button, FormLabel, useRadioGroup, useRadio, useToast } from '@chakra-ui/react'
-
 export default function Page() {
   return (
-    <Stack p={3} w="100%" maxW="1000px" alignItems="center">
+    <div className="mt-10 mx-auto max-w-md flex flex-col gap-5">
      <SnsItem name="Google"/>
      <SnsItem name="Apple"/>
-    </Stack>
-
+    </div>
   )
 }
 
-const SnsItem = ({ name }) => (
-  <Button colorScheme="blue">{name} Login</Button>)
+const SnsItem = ({ name }) => (<>
+<button className="bg-pink-300 py-3 px-5 w-full rounded-md">{name}</button></>)
