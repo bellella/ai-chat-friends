@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 
+@layer base {
+  /* .absolute-left {
+    @apply absolute m-auto left-0 right-0
+  } */
+}
+
+.absolute-x-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;

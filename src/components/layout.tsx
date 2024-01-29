@@ -1,6 +1,8 @@
 'use client'
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/16/solid';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 import NextLink from 'next/link';
 import React from 'react';
 
@@ -17,29 +19,29 @@ export default function GlobalLayout({ children }) {
 }
 
 const navigation = [
-    { name: 'friends', href: '/friends' },
-    { name: 'Chat', href: '/chat' },
-    { name: 'sign up', href: '/sign/form' },
-    { name: 'User', href: '/user/profile' },
-    { name: 'Sign in', href: '/sign/sns' },
+    { name: 'friends', href: '/friends', authorized: undefined },
+    { name: 'Sign Out', href: '/sign/form', authorized: true, fn: () => signOut()},
+    { name: 'Sign In', href: '/sign/sns',authorized: false },
 ]
 
 const Header = () => {
-    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+    const { data: session, status } = useSession();
+    const isAuthencated = status === "authenticated";
 
     return (<header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
-                <a href="#" className="-m-1.5 p-1.5">
+                <Link href="/" className="-m-1.5 p-1.5">
                     <span className="sr-only">Your Company</span>
                     <img
                         className="h-8 w-auto"
                         src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                         alt=""
                     />
-                </a>
+                </Link>
             </div>
-            <div className="flex lg:hidden">
+            <div className="flex md:hidden">
                 <button
                     type="button"
                     className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
@@ -49,17 +51,14 @@ const Header = () => {
                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                 </button>
             </div>
-            <div className="hidden lg:flex lg:gap-x-12">
+            <div className="hidden md:flex md:gap-x-12 absolute-x-center">
                 {navigation.map((item) => (
-                    <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
+                    (isAuthencated == item.authorized || item.authorized === undefined) ? 
+                    <Link key={item.name} href={!item.fn ? item.href : ''} 
+                    onClick={item.fn ? item.fn : undefined} className="text-sm font-semibold leading-6 text-gray-900">
                         {item.name}
-                    </a>
+                    </Link> : <></>
                 ))}
-            </div>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                    Log in <span aria-hidden="true">&rarr;</span>
-                </a>
             </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -97,12 +96,20 @@ const Header = () => {
                             ))}
                         </div>
                         <div className="py-6">
+                            {status === 'authenticated' ?
+                                                        <a
+                                                        href="#"
+                                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                                    >
+                                                        Sign out
+                                                    </a>: 
                             <a
-                                href="#"
-                                className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                            >
-                                Log in
-                            </a>
+                            href="#"
+                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                        >
+                            Sign in
+                        </a>
+                            }
                         </div>
                     </div>
                 </div>
