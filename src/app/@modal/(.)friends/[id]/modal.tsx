@@ -15,14 +15,19 @@ interface IModal {
 
 const Modal: React.FC<IModal> = ({ friend }) => {
   const { isAuthencated } = useAuth();
+  const [show, setShow] = React.useState<boolean>(isAuthencated);
   const router = useRouter();
   React.useEffect(() => {
     if (!isAuthencated) {
       return router.replace('/sign/sns')
     }
   }, [isAuthencated]);
+  
+  if (!isAuthencated) {
+    router.replace('/sign/sns')
+    return null;
+  }
 
-  const [show, setShow] = React.useState<boolean>(true);
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => router.back()}>
