@@ -1,10 +1,11 @@
+'use client';
 import { IFriend } from "@/lib/db/models/Friend";
 import Link from "next/link";
 
 export default async function FriendList({ search = '' }: { search: string }) {
   let friends: IFriend[] = [];
 
-  const res = await fetch('http://localhost:3000/api/friends?search=' + search, { method: 'GET', cache: 'no-cache', });
+  const res = await fetch('/api/friends?search=' + search, { method: 'GET', cache: 'no-cache', });
   friends = (await res.json()).friends;
   return <>
     {friends.map((c, i) => (
