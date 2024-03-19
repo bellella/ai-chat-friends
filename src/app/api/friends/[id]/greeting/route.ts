@@ -1,4 +1,4 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import dbConnect from "@/lib/db/dbConnect";
 import ChatHistory from "@/lib/db/models/ChatHistory";
 import Friend from "@/lib/db/models/Friend";

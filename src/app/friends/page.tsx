@@ -4,8 +4,11 @@ import React, { Suspense } from 'react'
 import Image from 'next/image';
 import SearchSvg from '@/resources/icon/search.svg';
 import FriendList from '@/components/friends/friend-list';
+import { NextPageFC } from '@/types/common';
 
-export default async function Page({ searchParams: { search } }) {
+
+
+const Page: NextPageFC<string, string> = async ({ searchParams }) => {
   // let friends: IFriend[] = [];
   // try {
   //   const res = await fetch('http://localhost:3000/api/friends?search=' + search, { method: 'GET', cache: 'no-cache' });
@@ -13,6 +16,8 @@ export default async function Page({ searchParams: { search } }) {
   // } catch (e) {
   //   console.log(e, 'erorr occured')
   // }
+
+const search = searchParams?.search || '';
 
   return (
     <div className="page max-w-[1000px] mx-auto">
@@ -55,3 +60,5 @@ function FriendCard({ id, name, mainImage, description }: IFriend) {
     <p className="text-small mt-1">{description}</p>
   </Link>)
 };
+
+export default Page;

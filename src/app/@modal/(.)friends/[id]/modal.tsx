@@ -7,13 +7,15 @@ import { Fragment } from "react";
 import Image from 'next/image';
 import { useAuth } from "@/lib/hooks/auth.hook";
 import Avatar from "@/components/common/avatar";
+import { IFriend } from "@/lib/db/models/Friend";
 
-export default function Modal({ friend }) {
+interface IModal {
+  friend: IFriend;
+}
+
+const Modal: React.FC<IModal> = ({ friend }) => {
   const { isAuthencated } = useAuth();
   const router = useRouter();
-  if (!isAuthencated) {
-    return router.replace('/sign/sns')
-  }
   React.useEffect(() => {
     if (!isAuthencated) {
       return router.replace('/sign/sns')
@@ -75,3 +77,5 @@ export default function Modal({ friend }) {
     </Transition.Root>
   )
 }
+
+export default Modal;

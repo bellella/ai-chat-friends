@@ -10,7 +10,7 @@ import LogoSvg from '@/resources/icon/logo.svg';
 import UserSvg from '@/resources/icon/user.svg';
 import { classNames } from '@/lib/helpers/ui';
 
-export default function GlobalLayout({ children }) {
+const GlobalLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <div className="bg-white">
             <Header></Header>
@@ -62,8 +62,12 @@ const Header = () => {
             <div className="hidden md:flex md:gap-x-12 absolute-x-center">
                 {navigation.map((item) => (
                     (isAuthencated == item.authorized || item.authorized === undefined) ?
-                        <Link key={item.name} href={!item.fn ? item.href : ''}
-                            onClick={item.fn ? item.fn : undefined} className="text-sm font-semibold leading-6 text-gray-900">
+                        // <Link key={item.name} href={!item.fn ? item.href : ''}
+                        //     onClick={item.fn ? item.fn : undefined} className="text-sm font-semibold leading-6 text-gray-900">
+                        //     {item.name}
+                        // </Link> : <></>
+                        <Link key={item.name} href={item.href}
+                            className="text-sm font-semibold leading-6 text-gray-900">
                             {item.name}
                         </Link> : <></>
                 ))}
@@ -192,3 +196,5 @@ function UserInfoButton({ user }: any) {
         </Transition>
     </Menu>
 }
+
+export default GlobalLayout;

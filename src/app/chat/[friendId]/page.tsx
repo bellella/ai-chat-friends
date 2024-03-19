@@ -1,13 +1,14 @@
 "use client";
 import Avatar from "@/components/common/avatar";
 import SubPage from "@/components/common/subpage";
+import {IFriend} from "@/lib/db/models/Friend";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function Page({ params }: { params: { friendId: string } }) {
-  const scrollRef = React.useRef<HTMLElement>(null);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
-  const [friend, setFriend] = React.useState();
+  const [friend, setFriend] = React.useState<IFriend>();
   const [isLoading, setIsLoading] = React.useState(true);
 
   // history
@@ -64,8 +65,7 @@ export default function Page({ params }: { params: { friendId: string } }) {
   } = useForm();
 
 
-  const submit = async (data: { input: string }) => {
-    const input = data.input;
+  const submit = async (input: string) => {
     setValue('input', '');
     setMessages(m => ([...m, { role: 'user', content: input }]));
 
@@ -81,6 +81,10 @@ export default function Page({ params }: { params: { friendId: string } }) {
     const { content } = await response.json();
 
     setMessages(m => ([...m, { role: 'assistant', content }]));
+  }
+
+  if(!friend) {
+    return null;
   }
 
   return (
@@ -101,12 +105,12 @@ export default function Page({ params }: { params: { friendId: string } }) {
               //     <p className="break-all">{msg.content}</p>
               //   </div>
               // </div>
-              msg.role === 'assistant' ? <ChatBubble avatarImage={friend?.avatarImage}>{msg.content}</ChatBubble> :
-              <UserChatBubble>{msg.content}</UserChatBubble>
+              msg.role === 'assistant' ? <ChatBubble key={index} avatarImage={friend.avatarImage}>{msg.content}</ChatBubble> :
+              <UserChatBubble key={index}>{msg.content}</UserChatBubble>
             ))}
           </div>
           <div className="p-5">
-            <form onSubmit={handleSubmit(submit)}>
+            <form onSubmit={handleSubmit((data) => submit(data.input))}>
               <div className="flex gap-3">
                 <input {...register("input", { required: true })} type="text" className="input-base flex-1 w-1" placeholder="Message Friend..." autoComplete="off"/>
                 <button className="button-base w-1/3 hidden sm:block">Send</button>
@@ -119,14 +123,14 @@ export default function Page({ params }: { params: { friendId: string } }) {
   )
 }
 
-const ChatBubble = ({children, avatarImage}) => <div
+const ChatBubble: React.FC<React.PropsWithChildren<{avatarImage: string}>> = ({children, avatarImage}) => <div
 className="flex gap-3"><Avatar image={avatarImage} />
 <div className="max-w-[80%] bg-purple-100 rounded rounded-e-xl rounded-es-xl p-2">
   <p>{children}</p>
 </div>
 </div>
 
-const UserChatBubble = ({ children }) => <div className="ml-auto max-w-[60%] rounded p-2 rounded-s-xl rounded-ee-xl bg-gray-200 ">
+const UserChatBubble: React.FC<React.PropsWithChildren<{}>> = ({ children }) => <div className="ml-auto max-w-[60%] rounded p-2 rounded-s-xl rounded-ee-xl bg-gray-200 ">
   <p>{children}</p>
 </div>
 

@@ -8,13 +8,12 @@ export default function SearchBar() {
         formState: { errors },
     } = useForm();
 
-    const submit = async (data) => {
-        const input = data.search;
+    const submit = async (search: string) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(submit)}>
-            <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <form onSubmit={handleSubmit(data => submit(data.search))}>
+            {/* <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div className="relative">
                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 </div>
@@ -25,6 +24,6 @@ export default function SearchBar() {
                   dark:placeholder-gray-400 dark:text-white
                    dark:focus:border-blue-500" placeholder="Search" required />
 
-            </div>
+            </div> */}
         </form>)
 }

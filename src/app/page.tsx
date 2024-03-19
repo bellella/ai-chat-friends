@@ -75,11 +75,11 @@ function ChatSection() {
     smooth: 1,
     layoutEffect: true
   });
-  const boxY = useTransform(
-    scrollYProgress,
-    [0, window.innerHeight],
-    [0, window.innerHeight]
-  );
+  // const boxY = useTransform(
+  //   scrollYProgress,
+  //   [0, window?.innerHeight],
+  //   [0, window?.innerHeight]
+  // );
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest === 1 || latest === 0) {
       sesIsScrollling(false);
@@ -184,7 +184,7 @@ function ChatSection() {
   )
 }
 
-const ChatBubble = ({ children, direction = 'right' }) => {
+const ChatBubble: React.FC<React.PropsWithChildren<{direction?: string}>> = ({ children, direction = 'right' }) => {
   //   const [scope, animate] = useAnimate()
   //   useEffect(() => {
   //     if (isInView) {
@@ -200,7 +200,7 @@ const ChatBubble = ({ children, direction = 'right' }) => {
     </div>
   )
 }
-const UserChatBubble = ({ children }) => <div className="ml-auto w-[60%] border border-black rounded p-2 rounded-s-xl rounded-ee-xl">
+const UserChatBubble: React.FC<React.PropsWithChildren> = ({ children }) => <div className="ml-auto w-[60%] border border-black rounded p-2 rounded-s-xl rounded-ee-xl">
   {children}
 </div>
 
@@ -229,7 +229,7 @@ function TextSection() {
     </section>
   )
 }
-const TextSectionText = ({ children }) => {
+const TextSectionText: React.FC<React.PropsWithChildren> = ({ children }) => {
   // const ref = React.useRef(null);
   // const { scrollYProgress } = useScroll({
   //   target: ref,
@@ -285,7 +285,7 @@ const SmoothText = ({ text = '' }) => {
   )
 }
 
-const Marquee = ({ children }) => {
+const Marquee: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className="marquee-container" style={{ width: "100%", overflow: "hidden" }}>
       <div className="marquee-inner" style={{ display: "inline-flex", whiteSpace: "nowrap" }}>
@@ -299,20 +299,20 @@ const Marquee = ({ children }) => {
   );
 };
 
-const Card = ({ children, delay }) => {
-  return (
-    <motion.div
-      initial={{ y: "30%", opacity: 0, scale: .5, x: '-10%' }}
-      whileInView={{ y: 0, opacity: 1, scale: 1, x: 0 }}
-      transition={{ duration: 0.3, delay }}
-      className="bg-white border border-black p-8 borderp-4 rounded-lg"
-    >
-      {children}
-    </motion.div>
-  );
-};
+// const Card = ({ children, delay }) => {
+//   return (
+//     <motion.div
+//       initial={{ y: "30%", opacity: 0, scale: .5, x: '-10%' }}
+//       whileInView={{ y: 0, opacity: 1, scale: 1, x: 0 }}
+//       transition={{ duration: 0.3, delay }}
+//       className="bg-white border border-black p-8 borderp-4 rounded-lg"
+//     >
+//       {children}
+//     </motion.div>
+//   );
+// };
 
-const HorizonCard = ({ children, className, delay }) => {
+const HorizonCard: React.FC<React.PropsWithChildren<{className: string; delay: number}>> = ({ children, className, delay }) => {
   return (
     <div className={className}>
       <motion.div
@@ -326,7 +326,7 @@ const HorizonCard = ({ children, className, delay }) => {
     </div>)
 }
 
-const MiniCard = ({ children, delay }) => {
+const MiniCard: React.FC<React.PropsWithChildren<{delay: number}>> = ({ children, delay }) => {
   return (
     <motion.div
       initial={{ y: "30%", opacity: 0, scale: 0 }}

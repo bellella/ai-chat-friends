@@ -51,5 +51,8 @@
   "browser": {
     "crypto": false,
     "stream": false
+  },
+  "resolutions": {
+    "jackspeak": "2.1.1"
   }
 }

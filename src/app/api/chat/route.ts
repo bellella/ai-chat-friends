@@ -5,7 +5,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "langchain/schema/output_parser";
 import dbConnect from "@/lib/db/dbConnect";
-import { auth } from "../auth/[...nextauth]/route";
+import { auth } from "../auth/[...nextauth]/auth";
 import ChatHistory from "@/lib/db/models/ChatHistory";
 import Friend from "@/lib/db/models/Friend";
 

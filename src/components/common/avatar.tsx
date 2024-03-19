@@ -1,4 +1,9 @@
-const Avatar = ({ image, altText = 'avatar' }) => {
+export interface AvatarInterface {
+  image: string;
+  altText?: string;
+}
+
+const Avatar: React.FC<AvatarInterface> = ({ image, altText = 'avatar' }) => {
     return (
       <div className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-200">
         <img
