@@ -3,8 +3,8 @@ import { classNames } from "@/lib/helpers/ui";
 import { animate, motion, useAnimate, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import React, { useEffect } from "react";
 
-const MarqueeText = () => <h1 className="text-4xl md:text-9xl font-bold text-nowrap p-5">
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur tenetur tempore eos, magnam enim commodi molestiae porro magni hic provident.
+const MarqueeText = () => <h1 className="text-4xl md:text-9xl font-bold text-nowrap whitespace-nowrap p-5">
+  Lorem ipsum dolor sit amet consectetur adipisicing elit.
 </h1>
 
 export default function Home() {

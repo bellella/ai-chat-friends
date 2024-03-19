@@ -5,6 +5,7 @@ type Gender = 'F' | 'M' | 'O';
 export interface IFriend {
   id: string;
   name: string;
+  subname: string;
   gender: Gender;
   prompt: string;
   mainImage: string;
@@ -18,6 +19,9 @@ const FriendSchema = new mongoose.Schema<IFriend>({
     type: String,
   },
   name: {
+    type: String,
+  },
+  subname: {
     type: String,
   },
   gender: {
