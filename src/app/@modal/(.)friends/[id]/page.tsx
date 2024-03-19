@@ -8,5 +8,5 @@ export default async function FriendModal({
   }) {
     const res = await fetch('/api/friends/'+id);
     const friend = (await res.json()).friend;
-    return <Modal character={friend}></Modal>;
+    return <Modal friend={friend}></Modal>;
   }

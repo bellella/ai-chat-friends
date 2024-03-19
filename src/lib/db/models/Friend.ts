@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 type Gender = 'F' | 'M' | 'O';
 
-export interface IFriend {
+export interface Friend {
   id: string;
   name: string;
   gender: Gender;
@@ -10,9 +10,10 @@ export interface IFriend {
   mainImage: string;
   avatarImage: string;
   description: string;
+  greeting: string;
 }
 
-const FriendSchema = new mongoose.Schema<IFriend>({
+const FriendSchema = new mongoose.Schema<Friend>({
   id: {
     type: String,
   },
@@ -33,10 +34,13 @@ const FriendSchema = new mongoose.Schema<IFriend>({
   },
   description: {
     type: String,
+  },
+  greeting: {
+    type: String,
   }
 })
 
-const Friend = mongoose.models.Friend || mongoose.model<IFriend>('Friend', FriendSchema)
+const Friend = mongoose.models.Friend || mongoose.model<Friend>('Friend', FriendSchema)
 
 Friend.schema.set('toJSON', {
   transform: function (doc, ret, options) {

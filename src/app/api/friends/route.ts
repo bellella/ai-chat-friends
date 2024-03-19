@@ -8,6 +8,6 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
     const keyword = req.nextUrl.searchParams.get('search');
     await dbConnect();
-    const friends = keyword !== 'undefined' ? await Friend.find({name: keyword}): await Friend.find();
+    const friends = keyword !== '' ? await Friend.find({name: keyword}): await Friend.find();
     return Response.json({friends})
 }

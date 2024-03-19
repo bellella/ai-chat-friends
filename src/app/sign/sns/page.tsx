@@ -7,20 +7,27 @@ export default function Page() {
   async function signInGoogle() {
     // email 가져와서
     // api에 요청하기
-    const res = await signIn('google', {redirect: false}).catch(e => {
-      console.log(e,'eeeee')
+    const res = await signIn('google', {callbackUrl: '/friends'}).catch(e => {
     });
-    console.log(res,'res~~')
     // 이미 있음 - 프렌즈 페이지
 
     // 없음 - 회원가입
   }
   return (
-    <div className="mt-10 mx-auto max-w-md flex flex-col gap-5">
-     <SnsItem name="Google" onClick={signInGoogle}/>
+      <div className="container mt-20 mx-auto max-w-[500px] flex flex-col gap-3 px-5">
+        <SnsItem name="Sign In By Google" onClick={signInGoogle} />
+        <SnsItem name="Sign In By ..." onClick={null}/>
+        <SnsItem name="Sign In By ..." onClick={null}/>
+        <SnsItem name="Sign In By ..." onClick={null}/>
     </div>
+
   )
 }
 
-const SnsItem = ({ name, onClick }) => (<>
-<button onClick={onClick} className="bg-pink-300 py-3 px-5 w-full rounded-md">{name}</button></>)
+const SnsItem = ({ name, onClick }: {name: string; onClick: (() => Promise<void>) | null}) => {
+  return onClick ? (
+    <button onClick={onClick} className="button-primary max-w-[500px]">{name}</button>
+  ) : (
+    <button className="button-disabled">{name}</button>
+  )
+}

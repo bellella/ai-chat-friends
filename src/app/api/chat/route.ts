@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { messages = [], friendId, input } = body;
+    console.log(messages,'meesage')
     const { user } = await auth();
     const userId = user.id;
     await dbConnect();
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
     const model = new ChatOpenAI({
       temperature: 0.8,
       modelName: "gpt-3.5-turbo-1106",
-      openAIApiKey: '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',
+      openAIApiKey: process.env.OPENAI_KEY,
       streaming: false
     });
 

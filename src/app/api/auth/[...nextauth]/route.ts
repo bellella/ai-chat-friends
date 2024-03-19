@@ -1,3 +1,6 @@
+import dbConnect from "@/lib/db/dbConnect";
+import User from "@/lib/db/models/User";
+import UserTemp, { IUserTemp } from "@/lib/db/models/UserTemp";
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions, getServerSession } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
@@ -11,39 +14,34 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ user, account, profile }) {
-            if (!(account && profile)) {
+            if (!(account && profile && profile.email && profile.name)) {
                 return false;
             }
             if (account.provider === "google") {
-                const email = profile.email;
-                // db search
-                // TODO url issue
-                const res = await fetch('http://localhost:3000/api/user/signin', { method: 'POST', body: JSON.stringify({ email }) })
-                    .catch(e => {
-                        console.log(e)
-                    });
-                const resJson = await res?.json();
+                const {email, name} = profile;
+                // check if user exist in db
+                const userFromDb = await getUser(email);
                 //db 있음
-                if (resJson.status === 'OK') {
-                    console.log('user its')
+                if (userFromDb) {
                     return true;
                 } else {
-                    const res = await fetch('http://localhost:3000/api/user/signin/temp', { method: 'POST', body: JSON.stringify({ email }) })
-                    const { userFromDb } = await res.json();
-                    return `/sign/form/${userFromDb.id}`;
+                    // temp에 저장
+                    const user = await createUserTemp(email, name);
+                    return `/sign/form/${user._id}`;
                 }
             }
             return true // Do different verification for other providers that don't have `email_verified`
         },
-        async jwt({ token, account,user }) {
+        async jwt({ token, account, user }) {
+            if (!(account && user && user.email)) {
+                return token;
+            }
             if (account) {
-                const res = await fetch('http://localhost:3000/api/user/signin', { method: 'POST', body: JSON.stringify({ email: user.email }) })
-                .catch(e => {
-                    console.log(e)
-                });
-                const resJson = await res?.json();
+                // user 정보 가져오기
+                const userFromDb = await getUser(user.email);
                 token.accessToken = account.access_token;
-                token.id = resJson.user.id;
+                token.id = userFromDb.id;
+                token.name = userFromDb.name;
             }
             return token
         },
@@ -51,6 +49,7 @@ export const authOptions: NextAuthOptions = {
             // I skipped the line below coz it gave me a TypeError
             // session.accessToken = token.accessToken;
             session.user.id = token.id;
+            session.user.name = token.name;
             return session;
         },
     },
@@ -72,3 +71,20 @@ export async function auth(...args: [GetServerSidePropsContext["req"], GetServer
   }
 
 export { handler as GET, handler as POST };
+
+async function getUser(email: string) {
+    await dbConnect();
+    const user = await User.findOne({
+        email
+    });
+    return user;
+}
+
+async function createUserTemp(email: string, name: string): Promise<IUserTemp> {
+    await dbConnect();
+    const user = await UserTemp.create({
+        email,
+        name,
+    });
+    return user;
+}

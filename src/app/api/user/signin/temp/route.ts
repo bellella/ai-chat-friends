@@ -25,6 +25,5 @@ export async function GET(req: NextRequest) {
     const id = req.nextUrl.searchParams.get('id');
     await dbConnect();
     const user = await UserTemp.findById(id);
-    console.log(user,'usersuerusuer!!')
     return Response.json({user})
 }
