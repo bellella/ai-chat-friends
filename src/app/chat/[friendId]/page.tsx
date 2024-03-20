@@ -21,7 +21,6 @@ export default function Page({ params }: { params: { friendId: string } }) {
         setMessages(history);
         scrollRef?.current?.scroll({ top: scrollRef?.current.scrollHeight });
       } else {
-        alert(123123)
         const greetingRes = await fetch(`/api/friends/${params.friendId}/greeting`, {
           method: "POST",
         });
