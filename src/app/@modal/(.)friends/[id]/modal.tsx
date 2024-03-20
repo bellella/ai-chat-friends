@@ -66,7 +66,7 @@ const Modal: React.FC<IModal> = ({ friend }) => {
                         <h4 className="text-md">
                           {friend.name}
                         </h4>
-                        <span className="text-sm text-gray-600">Cute girl</span>
+                        <span className="text-sm text-gray-600">{friend.subname}</span>
                       </div>
                     </div>
                     <p className="mt-3">{friend.description}</p>
