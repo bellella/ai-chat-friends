@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
                 // user 정보 가져오기
                 const userFromDb = await getUser(user.email);
                 token.accessToken = account.access_token;
-                token.id = userFromDb.id;
+                token.id = user.id;
                 token.name = userFromDb.name;
             }
             return token
