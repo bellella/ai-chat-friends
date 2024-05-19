@@ -1,15 +1,9 @@
+import { UserTemp } from '@/types/user';
 import mongoose from 'mongoose'
 
-export interface IUserTemp extends mongoose.Document {
-  id: string;
-  email: string; // Google email 
-  name: string;
-  gender: 'F' | 'M' | 'O';
-}
-
-const UserTempSchema = new mongoose.Schema<IUserTemp>({
-  id: {
-    type: String,
+const UserTempSchema = new mongoose.Schema<UserTemp>({
+  _id: {
+    type: mongoose.Types.ObjectId,
   },
   email: {
     type: String,
@@ -22,10 +16,10 @@ const UserTempSchema = new mongoose.Schema<IUserTemp>({
   },
 })
 
-const UserTemp = mongoose.models.UserTemp || mongoose.model<IUserTemp>('UserTemp', UserTempSchema)
+const UserTempModel = mongoose.models.UserTemp || mongoose.model<UserTemp>('UserTemp', UserTempSchema)
 
 
-UserTemp.schema.set('toJSON', {
+UserTempModel.schema.set('toJSON', {
   transform: function (doc, ret, options) {
       ret.id = ret._id;
       delete ret._id;
@@ -33,4 +27,4 @@ UserTemp.schema.set('toJSON', {
   }
 }); 
 
-export default UserTemp;
+export default UserTempModel;

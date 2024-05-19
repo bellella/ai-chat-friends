@@ -1,12 +1,23 @@
-'use client'
+import { getFriendById } from "@/lib/data/friend.data";
 import Modal from "./modal";
+import { unstable_noStore as noStore } from 'next/cache'
 
 export default async function FriendModal({
-    params: { id },
-  }: {
-    params: { id: string };
-  }) {
-    const res = await fetch('/api/friends/'+id);
-    const friend = (await res.json()).friend;
-    return <Modal friend={friend}></Modal>;
-  }
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  noStore();
+  const friend = await getFriendById(id);
+  if (!friend) return null;
+
+  return <Modal friend={friend}></Modal>;
+}
+
+export function generateStaticParams() {
+  return [{
+    params: {
+      id: 'a'
+    }
+  }];
+}

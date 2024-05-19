@@ -1,32 +1,15 @@
 'use client'
-import { Dialog, Transition } from "@headlessui/react";
-import Link from "next/link";
-import { redirect, useRouter } from 'next/navigation';
-import React, { useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import React from "react";
 import { Fragment } from "react";
-import Image from 'next/image';
-import { useAuth } from "@/lib/hooks/auth.hook";
-import Avatar from "@/components/common/avatar";
-import { IFriend } from "@/lib/db/models/Friend";
+import { Friend } from "@/types";
+import Avatar from '@/components/common/avatar';
+import { Dialog, Transition } from '@headlessui/react';
+import Link from 'next/link';
 
-interface IModal {
-  friend: IFriend;
-}
-
-const Modal: React.FC<IModal> = ({ friend }) => {
-  const { isAuthencated } = useAuth();
-  const [show, setShow] = React.useState<boolean>(isAuthencated);
+export default function Modal({ friend }: {friend: Friend}) {
+  const [show, setShow] = React.useState<boolean>(true);
   const router = useRouter();
-  React.useEffect(() => {
-    if (!isAuthencated) {
-      return router.replace('/sign/sns')
-    }
-  }, [isAuthencated]);
-  
-  if (!isAuthencated) {
-    router.replace('/sign/sns')
-    return null;
-  }
 
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -70,7 +53,7 @@ const Modal: React.FC<IModal> = ({ friend }) => {
                       </div>
                     </div>
                     <p className="mt-3">{friend.description}</p>
-                    <Link className="button-base block mt-5" href={`/chat/${friend.id}`}
+                    <Link className="button-base block mt-5" href={`/chat/${friend._id}`}
                     onClick={() => setShow(false)}>Start Talking</Link>
                   </div>
                 </div>
@@ -82,5 +65,3 @@ const Modal: React.FC<IModal> = ({ friend }) => {
     </Transition.Root>
   )
 }
-
-export default Modal;

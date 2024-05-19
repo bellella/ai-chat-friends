@@ -1,8 +1,6 @@
-import dbConnect from "@/lib/db/dbConnect";
-import User from "@/lib/db/models/User";
-import UserTemp, { IUserTemp } from "@/lib/db/models/UserTemp";
+import { createUserTemp, getUserByEmail } from "@/lib/data/user.data";
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
-import NextAuth, { NextAuthOptions, getServerSession } from "next-auth"
+import { NextAuthOptions, getServerSession } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
@@ -13,6 +11,9 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
+        async redirect() {
+            return '/';
+        },
         async signIn({ user, account, profile }) {
             if (!(account && profile && profile.email && profile.name)) {
                 return false;
@@ -20,7 +21,7 @@ export const authOptions: NextAuthOptions = {
             if (account.provider === "google") {
                 const {email, name} = profile;
                 // check if user exist in db
-                const userFromDb = await getUser(email);
+                const userFromDb = await getUserByEmail(email);
                 //db 있음
                 if (userFromDb) {
                     return true;
@@ -38,7 +39,7 @@ export const authOptions: NextAuthOptions = {
             }
             if (account) {
                 // user 정보 가져오기
-                const userFromDb = await getUser(user.email);
+                const userFromDb = await getUserByEmail(user.email);
                 token.accessToken = account.access_token;
                 token.id = user.id;
                 token.name = userFromDb.name;
@@ -54,34 +55,16 @@ export const authOptions: NextAuthOptions = {
         },
     },
     pages: {
-        signIn: '/auth/signin',
-        signOut: '/auth/signout',
-        error: '/auth/error', // Error code passed in query string as ?error=
-        verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+        signIn: '/sns/signin',
+        signOut: '/',
+        // error: '/auth/error', // Error code passed in query string as ?error=
+        // verifyRequest: '/auth/verify-request', // (used for check email message)
+        // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
     }
-}
-
-async function getUser(email: string) {
-    await dbConnect();
-    const user = await User.findOne({
-        email
-    });
-    return user;
-}
-
-async function createUserTemp(email: string, name: string): Promise<IUserTemp> {
-    await dbConnect();
-    const user = await UserTemp.create({
-        email,
-        name,
-    });
-    return user;
 }
 
 // Use it in server contexts
 export async function auth(...args: [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]] | [NextApiRequest, NextApiResponse] | []) {
     const session = await getServerSession(...args, authOptions);
-    return {user: session?.user}
+    return {user: session?.user, isAuthenticated: !!session}
   }
-

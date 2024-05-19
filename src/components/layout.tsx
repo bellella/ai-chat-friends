@@ -8,7 +8,7 @@ import Image from 'next/image';
 import React, { Fragment } from 'react';
 import LogoSvg from '@/resources/icon/logo.svg';
 import UserSvg from '@/resources/icon/user.svg';
-import { classNames } from '@/lib/helpers/ui';
+import { classNames } from '@/lib/utils/ui.util';
 
 const GlobalLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (

@@ -1,4 +1,4 @@
-import { classNames } from "@/lib/helpers/ui";
+import { classNames } from "@/lib/utils/ui.util";
 
 const SubPage: React.FC<React.PropsWithChildren<{className?: string; title?: string;}>> = ({ className = '', title = '', children }) => {
     return (

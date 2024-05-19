@@ -1,5 +1,5 @@
 'use client'
-import { classNames } from "@/lib/helpers/ui";
+import { classNames } from "@/lib/utils/ui.util";
 import { animate, motion, useAnimate, useMotionTemplate, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import React, { useEffect } from "react";
 
