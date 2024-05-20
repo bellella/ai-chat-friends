@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { friendId: string } })
     getFriendById(params.friendId),
     wait(2000)
   ]);
-  const initialState = chatMessages.map((msg, index) => ({id: index, display: msg.content, role: msg.role}))
+  const initialState = chatMessages.map((msg, index) => ({id: index, display: msg.content, role: msg.role}));
 
   if (!friend) {
     return null;

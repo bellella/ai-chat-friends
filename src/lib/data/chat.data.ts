@@ -20,8 +20,8 @@ export async function createChatMeesages(messages: any[]) {
     return prisma.chatMessage.createMany({data: messages});
 }
 
-export async function createFriendGreetMessage(friendId: string) {
+export async function createFriendGreetMessage(friendId: string): Promise<ChatMessage> {
     const userId = await getUserId();
     const {greeting} = await FriendModel.findById(friendId);
-    return prisma.chatMessage.createMany({data: {role: 'assistant', friendId, userId, content: greeting}});
+    return prisma.chatMessage.create({data: {role: 'assistant', friendId, userId, content: greeting}});
 }

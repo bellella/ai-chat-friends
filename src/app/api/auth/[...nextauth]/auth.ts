@@ -28,7 +28,7 @@ export const authOptions: NextAuthOptions = {
                 } else {
                     // temp에 저장
                     const user = await createUserTemp(email, name);
-                    return `/sign/form/${user._id}`;
+                    return `/sign/form/${user.id}`;
                 }
             }
             return true // Do different verification for other providers that don't have `email_verified`
@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
                 const userFromDb = await getUserByEmail(user.email);
                 token.accessToken = account.access_token;
                 token.id = user.id;
-                token.name = userFromDb.name;
+                token.name = userFromDb?.name;
             }
             return token
         },

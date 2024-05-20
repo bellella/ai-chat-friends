@@ -12,7 +12,7 @@ export async function isAuthencated() {
     return isAuthenticated;
 }
 
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findFirst({where: {email}})
     return user;
 }
@@ -28,6 +28,6 @@ export async function getUserTemp(id: string): Promise<UserTemp | null> {
     return prisma.userTemp.findFirst({where: {id}});
 }
 
-export async function createUser(user: User): Promise<User> {
+export async function createUser(user: Omit<User, 'id'>): Promise<User> {
     return prisma.user.create({data: user});
 }

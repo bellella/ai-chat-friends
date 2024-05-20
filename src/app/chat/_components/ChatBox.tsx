@@ -1,12 +1,12 @@
 'use client';
 import Avatar from "@/components/common/avatar";
-import { ChatMessage, Friend } from "@/types";
 import React, { useState } from "react";
 import { useUIState, useActions } from 'ai/rsc';
 import { AI } from "../../../lib/actions/chat.action";
 import UserChatBubble from "./UserChatBubble";
 import FriendChatBubble from "./FriendChatBubble";
 import { ScrollAnchor } from "@/components/chat/scroll-achor";
+import { ChatMessage, Friend } from "@prisma/client";
 
 interface ChatBoxInterface {
   chatMessages: ChatMessage[];
