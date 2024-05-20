@@ -30,7 +30,6 @@ User: {input}
 
 async function submitUserMessage(friendId: string, content: string) {
     'use server';
-
     const friend = await getFriendById(friendId);
     const userId = await getUserId();
 

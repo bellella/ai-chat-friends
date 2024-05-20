@@ -1,8 +1,6 @@
 import { auth } from "@/app/api/auth/[...nextauth]/auth";
-import UserModel from "../db/models/User.model";
-import dbConnect from "../db/dbConnect";
-import UserTempModel from "../db/models/UserTemp";
-import { User, UserTemp } from "@/types";
+import prisma from "../db/prisma";
+import { User, UserTemp } from "@prisma/client";
 
 export async function getUserId() {
     const { user } = await auth();
@@ -15,26 +13,21 @@ export async function isAuthencated() {
 }
 
 export async function getUserByEmail(email: string) {
-    await dbConnect;
-    const user = await UserModel.findOne({
-        email
-    });
+    const user = await prisma.user.findFirst({where: {email}})
     return user;
 }
 
 export async function createUserTemp(email: string, name: string): Promise<UserTemp> {
-    await dbConnect;
-    return UserTempModel.create({
+    return prisma.userTemp.create({data: {
         email,
         name,
-    });
+    }});
 }
 
 export async function getUserTemp(id: string): Promise<UserTemp | null> {
-    await dbConnect;
-    return UserTempModel.findById(id);
+    return prisma.userTemp.findFirst({where: {id}});
 }
 
-export async function createUser(user: Partial<User>): Promise<User> {
-    return UserModel.create(user);
+export async function createUser(user: User): Promise<User> {
+    return prisma.user.create({data: user});
 }

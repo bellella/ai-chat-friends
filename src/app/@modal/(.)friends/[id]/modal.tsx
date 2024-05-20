@@ -2,10 +2,10 @@
 import { useRouter } from 'next/navigation';
 import React from "react";
 import { Fragment } from "react";
-import { Friend } from "@/types";
 import Avatar from '@/components/common/avatar';
 import { Dialog, Transition } from '@headlessui/react';
 import Link from 'next/link';
+import { Friend } from '@prisma/client';
 
 export default function Modal({ friend }: {friend: Friend}) {
   const [show, setShow] = React.useState<boolean>(true);
@@ -52,8 +52,8 @@ export default function Modal({ friend }: {friend: Friend}) {
                         <span className="text-sm text-gray-600">{friend.subname}</span>
                       </div>
                     </div>
-                    <p className="mt-3">{friend.description}</p>
-                    <Link className="button-base block mt-5" href={`/chat/${friend._id}`}
+                    <p className="mt-3">{friend.subname}</p>
+                    <Link className="button-base block mt-5" href={`/chat/${friend.id}`}
                     onClick={() => setShow(false)}>Start Talking</Link>
                   </div>
                 </div>

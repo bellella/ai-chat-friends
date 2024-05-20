@@ -1,7 +1,7 @@
 import {Gender} from './common';
 
 export interface Friend {
-  _id: any;
+  _id: any!;
   id: string;
   name: string;
   subname: string;
